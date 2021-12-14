@@ -3,6 +3,9 @@ package com.example.barbertime.Entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -15,12 +18,16 @@ public class BtService {
     private Long id;
 
     @Column(name = "type")
+    @NotBlank(message = "type is required")
     private String type;
 
-    @Column(name = "description")
+    @Column(name = "description",length = 512)
+    @NotBlank(message = "message is required")
+    @Size(max = 512)
     private String description;
 
     @Column(name = "price")
+//    @NotBlank(message = "price is required") // Not working with Double !?
     private double price;
 
 
