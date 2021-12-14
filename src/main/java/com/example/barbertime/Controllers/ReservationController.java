@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.barbertime.Forms.ChangeStatusForm;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,14 +24,14 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createReservation(@RequestBody Reservation reservation)
+    public ResponseEntity<?> createReservation(@Valid @RequestBody Reservation reservation)
     {
         return reservationService.createReservation(reservation);
     }
 
 
     @PostMapping("/change-status/{id}")
-    public ResponseEntity<?> changeStatusReservation(@PathVariable String id, @RequestBody ChangeStatusForm changeStatusForm)
+    public ResponseEntity<?> changeStatusReservation(@PathVariable String id,@Valid @RequestBody ChangeStatusForm changeStatusForm)
     {
         return reservationService.changeStatusReservation(id,changeStatusForm);
     }
