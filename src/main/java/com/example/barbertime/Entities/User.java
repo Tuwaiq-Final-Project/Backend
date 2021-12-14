@@ -1,9 +1,12 @@
 package com.example.barbertime.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -38,16 +41,22 @@ public class User {
     @NotBlank(message = "role is required")
     private String role;
 
+    @JsonIgnoreProperties("user")
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservations;
+
+
     public User() {
     }
 
-    public User(Long id, String name, String email, String password, String phone, String role) {
+    public User(Long id, String name, String email, String password, String phone, String role, List<Reservation> reservations) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.role = role;
+        this.reservations = reservations;
     }
 
     public Long getId() {
@@ -96,5 +105,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }
