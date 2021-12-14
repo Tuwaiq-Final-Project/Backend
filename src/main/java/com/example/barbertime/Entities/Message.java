@@ -1,6 +1,10 @@
 package com.example.barbertime.Entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "messages")
@@ -12,12 +16,17 @@ public class Message {
     private Long id;
 
     @Column(name = "name")
+    @NotBlank(message = "name is required")
     private String name;
 
     @Column(name = "email")
+    @NotBlank(message = "email is required")
+    @Email(message = "Must add @ sign")
     private String email;
 
     @Column(name = "message",length = 512)
+    @Size(max = 512)
+    @NotBlank(message = "message is required")
     private String message;
 
     public Message() {
