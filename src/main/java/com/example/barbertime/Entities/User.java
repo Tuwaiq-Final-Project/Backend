@@ -1,11 +1,13 @@
 package com.example.barbertime.Entities;
 
+import com.example.barbertime.Role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,26 +39,24 @@ public class User {
     @Size(min = 10, max = 15 ,message = "phone must be between 10 and 15 characters!")
     private String phone;
 
-    @Column(name = "role")
-    @NotBlank(message = "role is required")
-    private String role;
-
     @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user")
     private List<Reservation> reservations;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
     }
 
-    public User(Long id, String name, String email, String password, String phone, String role, List<Reservation> reservations) {
+    public User(Long id, String name, String email, String password, String phone, List<Reservation> reservations, List<Role> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.role = role;
         this.reservations = reservations;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -99,19 +99,19 @@ public class User {
         this.phone = phone;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public List<Reservation> getReservations() {
         return reservations;
     }
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

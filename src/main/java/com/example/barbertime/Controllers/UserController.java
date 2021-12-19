@@ -1,6 +1,7 @@
 package com.example.barbertime.Controllers;
 
 import com.example.barbertime.Entities.User;
+import com.example.barbertime.Forms.CreateUserForm;
 import com.example.barbertime.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user)
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserForm createUserForm)
     {
-        return userService.createUser(user);
+        return userService.createUser(createUserForm);
     }
 
     @PutMapping("/{id}")
@@ -46,12 +47,6 @@ public class UserController {
     {
         return userService.deleteUser(id);
     }
-
-
-
-
-
-
 
     // Specific Requests
 
