@@ -24,14 +24,14 @@ public class User {
     @Size(min = 2, message = "name must be more than 2 characters!")
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @NotBlank(message = "email is required")
     @Email(message = "Must add @ sign")
     private String email;
 
     @Column(name = "password")
     @NotBlank(message = "password is required")
-    @Size(min = 3, message = "Password must be more than 3 characters!")
+    @Size(min = 8, message = "Password must be more than 8 characters!")
     private String password;
 
     @Column(name = "phone")

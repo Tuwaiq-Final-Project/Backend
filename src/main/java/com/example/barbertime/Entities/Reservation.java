@@ -18,12 +18,9 @@ public class Reservation {
     @Column(name = "id")
     private Long id;
 
-
-    //https://stackoverflow.com/questions/60948239/how-to-pass-timestamp-date-in-request-param-in-spring-boot-using-postman
     @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "date")
-//    @NotBlank(message = "date is required") // not work with Data !
     private Date date;
 
     @Column(name = "status")
@@ -40,7 +37,7 @@ public class Reservation {
     @JoinColumn(name = "service_id")
     @JsonIgnoreProperties("reservations")
     @JsonProperty(access = JsonProperty.Access.READ_WRITE)
-    private BtService service;
+    private ServiceType service;
 
 
 

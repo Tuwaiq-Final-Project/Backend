@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "services")
-public class BtService {
+public class ServiceType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,6 @@ public class BtService {
     private String description;
 
     @Column(name = "price")
-//    @NotBlank(message = "price is required") // Not working with Double !?
     private double price;
 
 
@@ -35,10 +34,10 @@ public class BtService {
     @OneToMany(mappedBy = "service")
     private List<Reservation> reservations;
 
-    public BtService() {
+    public ServiceType() {
     }
 
-    public BtService(Long id, String type, String description, double price, List<Reservation> reservations) {
+    public ServiceType(Long id, String type, String description, double price, List<Reservation> reservations) {
         this.id = id;
         this.type = type;
         this.description = description;
