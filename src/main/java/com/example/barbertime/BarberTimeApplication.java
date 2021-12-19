@@ -13,11 +13,6 @@ public class BarberTimeApplication {
         SpringApplication.run(BarberTimeApplication.class, args);
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

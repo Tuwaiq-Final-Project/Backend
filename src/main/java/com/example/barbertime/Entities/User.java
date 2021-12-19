@@ -34,7 +34,7 @@ public class User {
     @Size(min = 8, message = "Password must be more than 8 characters!")
     private String password;
 
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
     @NotBlank(message = "phone is required")
     @Size(min = 10, max = 15 ,message = "phone must be between 10 and 15 characters!")
     private String phone;
