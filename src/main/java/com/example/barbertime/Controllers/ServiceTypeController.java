@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("services")
+@CrossOrigin("*")
 public class ServiceTypeController {
 
     @Autowired
@@ -27,6 +28,5 @@ public class ServiceTypeController {
     {
         return serviceTypeService.saveService(service);
     }
-
 
 }

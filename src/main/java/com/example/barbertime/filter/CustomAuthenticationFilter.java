@@ -2,8 +2,11 @@ package com.example.barbertime.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.barbertime.Repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,9 +29,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager ){
+    private final UserRepository userRepository;
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository ){
         this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -47,14 +51,34 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String email = user.getEmail();
         String password = user.getPassword();
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,password);
-        return authenticationManager.authenticate(authenticationToken);
+        try{
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,password);
+            return authenticationManager.authenticate(authenticationToken);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Something error at attemptAuthentication function");
+            System.out.println(e);
+            throw new BadCredentialsException("Password incorrect",e);
+        }
+
     }
 
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException
+    {
         User user = (User)authentication.getPrincipal();
+        com.example.barbertime.Entities.User dbUser = userRepository.findByEmail(user.getUsername());
+
+        Map<String,String> userDetails = new HashMap<>();
+        userDetails.put("id",dbUser.getId().toString());
+        userDetails.put("name",dbUser.getName().toString());
+
+        Map<String, Map<String,String>> returnUser = new HashMap<>();
+        returnUser.put("userInfo",userDetails);
+
         Algorithm algorithm = Algorithm.HMAC256("jwt_super_secret".getBytes());
         String access_token = JWT.create()
+                .withPayload(returnUser)
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 480 * 60 * 1000))
                 .withIssuer(request.getRequestURI().toString())

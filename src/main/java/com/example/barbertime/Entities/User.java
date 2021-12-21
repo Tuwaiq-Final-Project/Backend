@@ -20,23 +20,23 @@ public class User {
     private Long id;
 
     @Column(name = "name")
-    @NotBlank(message = "name is required")
-    @Size(min = 2, message = "name must be more than 2 characters!")
+//    @NotBlank(message = "name is required")
+//    @Size(min = 2, message = "name must be more than 2 characters!")
     private String name;
 
     @Column(name = "email", unique = true)
-    @NotBlank(message = "email is required")
-    @Email(message = "Must add @ sign")
+//    @NotBlank(message = "email is required")
+//    @Email(message = "Must add @ sign")
     private String email;
 
     @Column(name = "password")
-    @NotBlank(message = "password is required")
-    @Size(min = 8, message = "Password must be more than 8 characters!")
+//    @NotBlank(message = "password is required")
+//    @Size(min = 8, message = "Password must be more than 8 characters!")
     private String password;
 
     @Column(name = "phone", unique = true)
-    @NotBlank(message = "phone is required")
-    @Size(min = 10, max = 15 ,message = "phone must be between 10 and 15 characters!")
+//    @NotBlank(message = "phone is required")
+//    @Size(min = 10, max = 15 ,message = "phone must be between 10 and 15 characters!")
     private String phone;
 
     @JsonIgnoreProperties("user")
@@ -57,6 +57,11 @@ public class User {
         this.phone = phone;
         this.reservations = reservations;
         this.roles = roles;
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password=password;
     }
 
     public Long getId() {

@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("users")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserForm createUserForm)
+    public ResponseEntity<?> createUser( @RequestBody CreateUserForm createUserForm)
     {
         return userService.createUser(createUserForm);
     }
