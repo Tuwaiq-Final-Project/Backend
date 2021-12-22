@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser( @RequestBody CreateUserForm createUserForm)
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserForm createUserForm)
     {
         return userService.createUser(createUserForm);
     }

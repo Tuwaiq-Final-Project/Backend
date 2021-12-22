@@ -29,20 +29,7 @@ public class ReservationService {
 
     public ResponseEntity<?> createReservation(Reservation reservation)
     {
-        // for check if the user book for him self only
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = (User) authentication.getPrincipal();
-//
-//        System.out.println("authentication user id : " + user.getId() ) ;
-//        System.out.println("reservation user id : " + reservation.getUser().getId()) ;
-//        if(user.getId() !=  reservation.getUser().getId())
-//        {
-//            return ResponseEntity.status(403).body("You are not Authorize");
-//        }
-//        else
-//        {
-//            return ResponseEntity.ok().body(reservationRepository.save(reservation));
-//        }
+        // Note : before return : check if the user book for him self only ( by get the compare authentication id & the body request id).
         return ResponseEntity.ok().body(reservationRepository.save(reservation));
     }
 

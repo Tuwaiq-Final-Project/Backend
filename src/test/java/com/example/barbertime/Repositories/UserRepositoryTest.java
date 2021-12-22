@@ -12,21 +12,18 @@ class UserRepositoryTest {
 
 
 
-//    @Autowired
-//    private  UserRepository userRepository;
+    @Autowired
+    private  UserRepository userRepository;
 
 
-    // Note: To make the test work ( disable the validation )
-//    @Test
-//    void itShouldFindByEmail()
-//    {
-//        String email = "a@a.com";
-            // Note: Add a constructor that have user & password at UserRepository
-//        User user = new User(email,"123");
-//        userRepository.save(user);
-//
-//        User result = userRepository.findByEmail(email);
-//
-//        assertEquals(email,result.getEmail());
-//    }
+    @Test
+    void itShouldFindByEmail()
+    {
+        String email = "a@a.com";
+        User user = new User("saad","a@a.com","grntjntoug","05578555555");
+        userRepository.save(user);
+
+        User result = userRepository.findByEmail(email);
+        assertEquals(email,result.getEmail());
+    }
 }
