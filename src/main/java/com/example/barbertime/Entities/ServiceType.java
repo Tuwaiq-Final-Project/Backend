@@ -29,6 +29,8 @@ public class ServiceType {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "period")
+    private int period;
 
     @JsonIgnoreProperties("service")
     @OneToMany(mappedBy = "service")

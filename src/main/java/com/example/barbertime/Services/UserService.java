@@ -8,6 +8,7 @@ import com.example.barbertime.Role.RoleRepo;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Service
@@ -63,12 +62,49 @@ public class UserService implements UserDetailsService {
 
     public ResponseEntity<?> createUser(CreateUserForm createUserForm)
     {
-        User user = createUserForm.getUser();
-        Long role_id = createUserForm.getRole_id();
-        Role role = roleRepo.findById(role_id).orElse(null);
-        user.getRoles().add(role);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return ResponseEntity.ok().body(userRepository.save(user));
+        Map<String,String> returnCreateUser = new HashMap<>();
+
+        try{
+            // check if there a USER = 1 role in database
+            if(roleRepo.findById(createUserForm.getRole_id()).orElse(null) == null)
+            {
+                returnCreateUser.put("error","There are no roles on DB");
+                return ResponseEntity.status(404).body(returnCreateUser);
+            }
+            // check if the email is already used
+            if(userRepository.findByEmail(createUserForm.getUser().getEmail()) != null)
+            {
+                returnCreateUser.put("email","The email already used");
+            }
+
+            // check if the phone is already used
+            if(userRepository.findByPhone(createUserForm.getUser().getPhone()) != null)
+            {
+                returnCreateUser.put("phone","The Phone already used");
+            }
+
+            // check if the email or phone are already used
+            if(!returnCreateUser.isEmpty())
+            {
+                return ResponseEntity.status(404).body(returnCreateUser);
+            }
+
+            User user = createUserForm.getUser();
+            Long role_id = createUserForm.getRole_id();
+            Role role = roleRepo.findById(role_id).orElse(null);
+            user.getRoles().add(role);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            userRepository.save(user);
+            returnCreateUser.put("success","Account created successfully");
+            return ResponseEntity.ok().body(returnCreateUser);
+
+        }
+        catch (Exception e)
+        {
+            returnCreateUser.put("error","General Exception");
+            return ResponseEntity.status(404).body(returnCreateUser);
+        }
     }
 
     public ResponseEntity<?> updateUser(String id, User updatedData)

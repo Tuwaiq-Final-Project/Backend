@@ -36,7 +36,7 @@ public class User {
 
     @Column(name = "phone", unique = true)
     @NotBlank(message = "phone is required")
-    @Size(min = 10, max = 15 ,message = "phone must be between 10 and 15 characters!")
+    @Size(min = 10, max = 20 ,message = "phone must be between 10 and 20 characters!")
     private String phone;
 
     @JsonIgnoreProperties("user")
@@ -57,6 +57,19 @@ public class User {
         this.phone = phone;
         this.reservations = reservations;
         this.roles = roles;
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password=password;
+    }
+
+    // for testing at itShouldFindByEmail
+    public User( String name, String email, String password, String phone) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
     }
 
     public Long getId() {

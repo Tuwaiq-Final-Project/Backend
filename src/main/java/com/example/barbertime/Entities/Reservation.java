@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -18,10 +21,15 @@ public class Reservation {
     @Column(name = "id")
     private Long id;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
+
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime time;
+
 
     @Column(name = "status")
     @NotBlank(message = "status is required")
@@ -45,11 +53,13 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Long id, Date date, String status, User user) {
+    public Reservation(Long id, LocalDate date, LocalTime time, String status, User user, ServiceType service) {
         this.id = id;
         this.date = date;
+        this.time = time;
         this.status = status;
         this.user = user;
+        this.service = service;
     }
 
     public Long getId() {
@@ -60,12 +70,20 @@ public class Reservation {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public String getStatus() {
@@ -82,5 +100,13 @@ public class Reservation {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public ServiceType getService() {
+        return service;
+    }
+
+    public void setService(ServiceType service) {
+        this.service = service;
     }
 }
