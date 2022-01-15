@@ -57,10 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // Define the authorization patterns below
         // -------------------- for ADMIN --------------------
-        http.authorizeRequests().antMatchers( "/services/**").hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers( POST,"/services/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(POST,"/roles").permitAll(); // After creat an account for ADMIN ( hasAnyAuthority("ADMIN"); )
         // -------------------- for USER --------------------
-        http.authorizeRequests().antMatchers( "/reservations/**").hasAnyAuthority("USER");
+//        http.authorizeRequests().antMatchers( "/reservations/**").hasAnyAuthority("USER");
+        http.authorizeRequests().antMatchers( GET,"/services").hasAnyAuthority("USER","ADMIN");
+
         // -------------------- for Other --------------------
         http.authorizeRequests().antMatchers(POST, "/login").permitAll();
         http.authorizeRequests().antMatchers(POST,"/users").permitAll();
@@ -68,8 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/messages/**").permitAll();
 
-        http.authorizeRequests().anyRequest().authenticated();
-        //http.authorizeRequests().anyRequest().permitAll();
+//        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().anyRequest().permitAll();
 
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -21,11 +21,11 @@ public class Message {
 
     @Column(name = "email")
     @NotBlank(message = "email is required")
-    @Email(message = "Must add @ sign")
+    @Email(message = "Must add valid email")
     private String email;
 
     @Column(name = "message",length = 512)
-    @Size(max = 512)
+    @Size(max = 512,message ="Message's size must be between 0 and 512")
     @NotBlank(message = "message is required")
     private String message;
 
