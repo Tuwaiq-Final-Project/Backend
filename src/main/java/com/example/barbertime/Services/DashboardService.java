@@ -53,4 +53,13 @@ public class DashboardService {
         dataMap.put("messages",messageRepository.findAll().size());
         return dataMap;
     }
+
+    public Map<String, Integer> getUsersMessages()
+    {
+        Map<String,Integer> myMap = new HashMap<>();
+        myMap.put("users",userRepository.findAll().size());
+        myMap.put("messages",messageRepository.findAll().size());
+
+        return myMap;
+    }
 }

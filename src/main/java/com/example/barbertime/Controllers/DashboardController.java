@@ -22,4 +22,10 @@ public class DashboardController {
     {
         return dashboardService.getAllData();
     }
+
+    @GetMapping("get-users-messages")
+    public Map<String,Integer> getUsersMessages()
+    {
+        return dashboardService.getUsersMessages();
+    }
 }

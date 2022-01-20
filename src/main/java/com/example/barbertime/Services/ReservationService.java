@@ -1,23 +1,18 @@
 package com.example.barbertime.Services;
 
-import com.example.barbertime.Controllers.ReservationController;
 import com.example.barbertime.Entities.Reservation;
-import com.example.barbertime.Entities.User;
-import com.example.barbertime.Forms.ReservationRequestForm;
+import com.example.barbertime.OtherClasses.AvailableDaysTimes;
 import com.example.barbertime.Repositories.ReservationRepository;
 import com.example.barbertime.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import com.example.barbertime.Forms.ChangeStatusForm;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.*;
 
 @Service
 public class ReservationService {
@@ -55,26 +50,6 @@ public class ReservationService {
         }
     }
 
-    public ResponseEntity<?> reservationRequest(String id, ReservationRequestForm reservationRequestForm)
-    {
-        System.out.println("aa");
-
-        Reservation reservationRequest = reservationRepository.findById(Long.parseLong(id)).orElse(null);
-
-        if (reservationRequest != null)
-        {
-            User u =  userRepository.findById(Long.parseLong(reservationRequestForm.getUser())).orElse(null);
-            reservationRequest.setUser(u);
-            reservationRepository.save(reservationRequest);
-            return ResponseEntity.ok().body("Request applied Successfully");
-        }
-        else{
-            System.out.println("Not gg");
-            return ResponseEntity.status(404).body("Reservation Not Found");
-        }
-
-    }
-
     public List<Reservation> getMyReservations(String id)
     {
         return reservationRepository.findByUser_id(Long.parseLong(id));
@@ -97,5 +72,41 @@ public class ReservationService {
 
         havePending.put("message",false);
         return ResponseEntity.status(200).body(havePending);
+    }
+
+    public ResponseEntity<?> getAvailableDaysTimes()
+    {
+        List<AvailableDaysTimes> gg = new ArrayList<>();
+        String []times = {"13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"};
+        LocalDate Copyday = LocalDate.now();
+
+        for(long i=1 ; i <=7 ;i++)
+        {
+
+            ArrayList<String> AvailableTimesAfterFilters = getAvailableTimes(Copyday,times);
+
+            AvailableDaysTimes a1 = new AvailableDaysTimes(Copyday.getDayOfWeek().toString(),Copyday.toString(),AvailableTimesAfterFilters);
+
+
+            gg.add(a1);
+            Copyday = Copyday.plusDays(1);
+
+        }
+
+        return ResponseEntity.ok().body(gg);
+    }
+
+    private ArrayList<String> getAvailableTimes(LocalDate  day , String []times)
+    {
+        ArrayList<String> newArrrr = new ArrayList<>();
+
+        for (String s:times)
+        {
+            if(reservationRepository.findByDateAndTime(day, LocalTime.parse(s)) == null)
+            {
+                newArrrr.add(s);
+            }
+        }
+        return newArrrr;
     }
 }

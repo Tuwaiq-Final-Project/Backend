@@ -1,7 +1,6 @@
 package com.example.barbertime.Controllers;
 
 import com.example.barbertime.Entities.Reservation;
-import com.example.barbertime.Forms.ReservationRequestForm;
 import com.example.barbertime.Services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +24,13 @@ public class ReservationController {
         return reservationService.getReservations();
     }
 
+
+    @GetMapping("/available-days-times")
+    public ResponseEntity<?> getAvailableDaysTimes()
+    {
+        return reservationService.getAvailableDaysTimes();
+    }
+
     @GetMapping("/my-reservations/{id}")
     public List<Reservation> getMyReservations(@PathVariable String id)
     {
@@ -42,14 +48,6 @@ public class ReservationController {
     {
         return reservationService.createReservation(reservation);
     }
-
-    @PostMapping("/reservation-Request/{id}")
-    public ResponseEntity<?> reservationRequest(@PathVariable String id, @RequestBody ReservationRequestForm reservationRequestForm)
-    {
-        System.out.println("zz");
-        return reservationService.reservationRequest(id,reservationRequestForm);
-    }
-
 
     @PostMapping("/change-status/{id}")
     public ResponseEntity<?> changeStatusReservation(@PathVariable String id,@Valid @RequestBody ChangeStatusForm changeStatusForm)
